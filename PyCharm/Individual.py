@@ -27,9 +27,6 @@ def add_student():
         'marks': marks,
     }
 
-    if sum(marks) / 5 > 4:
-        filter_students.append(student)
-
     students.append(student)
 
 
@@ -60,31 +57,36 @@ def out_students():
     print(line)
 
 
-def out_students_finter():
-    line = '+-{}-+-{}-+-{}-+'.format(
-        '-' * 4,
-        '-' * 30,
-        '-' * 14,
-    )
-    print(line)
-    print(
-        '| {:^4} | {:^30} | {:^14} |'.format(
-            "№",
-            "Ф.И.О.",
-            "Номер группы",
+def out_students_filter():
+    if len(students) > 0:
+        line = '+-{}-+-{}-+-{}-+'.format(
+            '-' * 4,
+            '-' * 30,
+            '-' * 14,
         )
-    )
-    print(line)
-
-    for idx, student in enumerate(filter_students, 1):
+        print(line)
         print(
-            '| {:>4} | {:<30} | {:<14} |'.format(
-                idx,
-                student.get('name', ''),
-                student.get('group', ''),
+            '| {:^4} | {:^30} | {:^14} |'.format(
+                "№",
+                "Ф.И.О.",
+                "Номер группы",
             )
         )
-    print(line)
+        print(line)
+
+        for idx, student in enumerate(students, 1):
+            if sum(student.get('marks')) / 5 > 4:
+                print(
+                    '| {:>4} | {:<30} | {:<14} |'.format(
+                        idx,
+                        student.get('name', ''),
+                        student.get('group', ''),
+                    )
+                )
+                print(line)
+
+    else:
+        print("Список студентов пустой.")
 
 
 def main():
@@ -103,9 +105,6 @@ def main():
             if len(students) > 1:
                 students.sort(key=lambda item: item.get('group', ''))
 
-            if len(filter_students) > 1:
-                filter_students.sort(key=lambda item: item.get('group', ''))
-
         elif command == 'list':
             if len(students) > 0:
                 out_students()
@@ -114,9 +113,9 @@ def main():
 
         elif command == "filter list":
             if len(students) > 0:
-                out_students_finter()
+                out_students_filter()
             else:
-                print("Нет студентов со средним баллом больше 4")
+                print("Список студентов пустой.")
 
         else:
             print(f"Неизвестная команда {command}", file=sys.stderr)
@@ -124,6 +123,5 @@ def main():
 
 if __name__ == '__main__':
     students = []
-    filter_students = []
 
     main()
