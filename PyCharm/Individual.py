@@ -5,6 +5,9 @@ import sys
 
 
 def help_info():
+    """
+    Вывод информации о командах
+    """
     print("Список команд:")
     print("add - добавить студента")
     print("list - вывести список студентов")
@@ -13,6 +16,9 @@ def help_info():
 
 
 def add_student():
+    """
+    Добавление студента в список
+    """
     name = input("Фамилия и инициалы студента: ")
     group = int(input("Номер группы: "))
     marks = list(map(int, input("Пять оценок студента: ").split()))
@@ -31,6 +37,9 @@ def add_student():
 
 
 def out_students():
+    """
+    Вывод списка студентов
+    """
     line = '+-{}-+-{}-+-{}-+'.format(
         '-' * 4,
         '-' * 30,
@@ -58,6 +67,9 @@ def out_students():
 
 
 def out_students_filter():
+    """
+    Вывод списка студентов со средним баллом больше 4
+    """
     if len(students) > 0:
         line = '+-{}-+-{}-+-{}-+'.format(
             '-' * 4,
@@ -90,6 +102,9 @@ def out_students_filter():
 
 
 def main():
+    """
+    Главная функция
+    """
     while True:
         command = input(">>> ").lower()
 
