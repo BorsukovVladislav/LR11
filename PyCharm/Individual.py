@@ -27,50 +27,18 @@ def add_student():
         print("Неверное количество оценок", file=sys.stderr)
         return
 
-    student = {
+    return {
         'name': name,
         'group': group,
         'marks': marks,
     }
 
-    students.append(student)
 
-
-def out_students():
+def out_students(list_stud):
     """
     Вывод списка студентов
     """
-    line = '+-{}-+-{}-+-{}-+'.format(
-        '-' * 4,
-        '-' * 30,
-        '-' * 14,
-    )
-    print(line)
-    print(
-        '| {:^4} | {:^30} | {:^14} |'.format(
-            "№",
-            "Ф.И.О.",
-            "Номер группы",
-        )
-    )
-    print(line)
-
-    for idx, student in enumerate(students, 1):
-        print(
-            '| {:>4} | {:<30} | {:<14} |'.format(
-                idx,
-                student.get('name', ''),
-                student.get('group', ''),
-            )
-        )
-    print(line)
-
-
-def out_students_filter():
-    """
-    Вывод списка студентов со средним баллом больше 4
-    """
-    if len(students) > 0:
+    if list_stud:
         line = '+-{}-+-{}-+-{}-+'.format(
             '-' * 4,
             '-' * 30,
@@ -86,17 +54,29 @@ def out_students_filter():
         )
         print(line)
 
-        for idx, student in enumerate(students, 1):
-            if sum(student.get('marks')) / 5 > 4:
-                print(
-                    '| {:>4} | {:<30} | {:<14} |'.format(
-                        idx,
-                        student.get('name', ''),
-                        student.get('group', ''),
-                    )
+        for idx, student in enumerate(list_stud, 1):
+            print(
+                '| {:>4} | {:<30} | {:<14} |'.format(
+                    idx,
+                    student.get('name', ''),
+                    student.get('group', ''),
                 )
-                print(line)
+            )
+        print(line)
+    else:
+        print("Список студентов пустой.")
 
+
+def students_filter(list_s):
+    """
+    Вывод списка студентов со средним баллом больше 4
+    """
+    if len(list_s) > 0:
+        filter_s = []
+        for student in list_s:
+            if sum(student.get('marks')) / 5 > 4:
+                filter_s.append(student)
+        return filter_s
     else:
         print("Список студентов пустой.")
 
@@ -105,6 +85,9 @@ def main():
     """
     Главная функция
     """
+
+    students = []
+
     while True:
         command = input(">>> ").lower()
 
@@ -115,28 +98,22 @@ def main():
             help_info()
 
         elif command == 'add':
-            add_student()
+            student = add_student()
+            students.append(student)
 
             if len(students) > 1:
                 students.sort(key=lambda item: item.get('group', ''))
 
         elif command == 'list':
-            if len(students) > 0:
-                out_students()
-            else:
-                print("Список студентов пустой.")
+            out_students(students)
 
         elif command == "filter list":
-            if len(students) > 0:
-                out_students_filter()
-            else:
-                print("Список студентов пустой.")
+            filter_list = students_filter(students)
+            out_students(filter_list)
 
         else:
             print(f"Неизвестная команда {command}", file=sys.stderr)
 
 
 if __name__ == '__main__':
-    students = []
-
     main()
